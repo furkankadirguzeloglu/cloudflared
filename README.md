@@ -12,6 +12,7 @@ Compiled binary from https://github.com/cloudflare/cloudflared to mipsle devices
 Tested on Keenetic Viva(KN-1910)(Keenetic OS 4.2 Beta 3) with Entware
 
 Usage:
+
 Connect to OPKG SSH
 
 `opkg install wget-ssl `
@@ -66,7 +67,7 @@ after compiling - u can found `cloudflared` binary in folder
 Updating:
 
 
-if u wanna update `cloudflared`:
+if u wanna update  cloudflared:
 
 `cd cloudflared`
 
