@@ -25,84 +25,116 @@ Please direct all questions and complaints to the original [cloudflared](https:/
 This is just an assembly for MIPSLE devices, compiled from the source code **without any changes**.  
 All open issues related to the work of Cloudflared itself will be closed without response. You have been warned.
 
-## Installation
+## Installation Guide
 
 ### Precompiled Binary
 
-Compiled binary from [cloudflared](https://github.com/cloudflare/cloudflared) for MIPSLE devices. Tested on Keenetic Giga (KN-1010) with Keenetic OS 4.3.6.1 and Entware.
+Instructions for installing the precompiled Cloudflared binary on **MIPSLE devices**.
+Tested on **Keenetic Giga (KN-1010)** running **KeeneticOS 4.3.6.1** with **Entware**.
 
-1. Connect to OPKG SSH:
+#### Step 1: Install Required Packages
 
-   ```bash
-   opkg install wget-ssl
-   # If wget already exists and complains about HTTP/FTP:
-   opkg remove wget-nossl
-   ```
+Install essential utilities:
 
-2. Download the init script:
+```bash
+opkg update
+opkg install nano
+opkg install cron
+```
 
-   ```bash
-   wget -O /opt/etc/init.d/S99cloudflared https://raw.githubusercontent.com/furkankadirguzeloglu/cloudflared/main/S99cloudflared
-   nano /opt/etc/init.d/S99cloudflared
-   # Replace %yourtoken% with your Cloudflare Zero Trust Tunnel token
-   chmod +x /opt/etc/init.d/S99cloudflared
-   ```
+- `nano` is a text editor for editing configuration files.
+- `cron` is required to schedule automatic service startup.
 
-3. Download the Cloudflared binary:
+#### Step 2: Download and Configure the Init Script
 
-   ```bash
-   wget -O /opt/home/cloudflared https://github.com/furkankadirguzeloglu/cloudflared/raw/main/cloudflared
-   chmod +x /opt/home/cloudflared
-   ```
+Download the initialization script to manage the Cloudflared service:
 
-4. Start the service:
+```bash
+wget --no-check-certificate -O /opt/etc/init.d/S99cloudflared https://raw.githubusercontent.com/furkankadirguzeloglu/cloudflared/main/S99cloudflared
+nano /opt/etc/init.d/S99cloudflared   # Replace %yourtoken% with your Cloudflare Zero Trust Tunnel token
+chmod +x /opt/etc/init.d/S99cloudflared
+```
 
-   ```bash
-   /opt/etc/init.d/S99cloudflared start
-   # Or reboot your router; after ~60 seconds, Cloudflared will be online and visible in the Cloudflare Zero Trust Dashboard
-   ```
+- Insert your **Cloudflare Zero Trust Tunnel token** into the script.
+- Make the script executable for proper service management.
 
-### Build Yourself
+#### Step 3: Download the Cloudflared Binary
 
-Compiled binary from [cloudflared](https://github.com/cloudflare/cloudflared) for MIPSLE devices. Tested on Keenetic Giga (KN-1010) with Keenetic OS 4.3.6.1 and Entware.
+```bash
+wget --no-check-certificate -O /opt/home/cloudflared https://github.com/furkankadirguzeloglu/cloudflared/raw/main/cloudflared
+chmod +x /opt/home/cloudflared
+```
 
-1. If you want to build it yourself, first install Go Lang:
+- The binary is tailored for MIPSLE devices and compatible with Keenetic routers.
 
-   ```bash
-   apt update && apt upgrade
-   ```
+#### Step 4: Start the Cloudflared Service
 
-2. Clone the repository:
+```bash
+/opt/etc/init.d/S99cloudflared start
+# Or reboot the router. Cloudflared starts automatically within ~60 seconds.
+```
 
-   ```bash
-   git clone https://github.com/cloudflare/cloudflared
-   cd cloudflared
-   ```
+- Verify the service status in the **Cloudflare Zero Trust Dashboard**.
 
-3. Install the build toolchain:
+#### Step 5: Enable Automatic Startup on Reboot
 
-   ```bash
-   ./.teamcity/install-cloudflare-go.sh
-   ```
+```bash
+export VISUAL=nano
+export EDITOR=nano
+crontab -e
+# Add the line:
+# @reboot /opt/etc/init.d/S99cloudflared start
+reboot
+```
 
-4. Check for success message:
-   ```bash
-   Installed Go for linux/amd64 in /tmp/go
-   Installed commands in /tmp/go/bin - all ok
-   ```
-   
-5. Check for success message:
-   ```bash
-   Installed Go for linux/amd64 in /tmp/go
-   Installed commands in /tmp/go/bin - all ok
-   ```
+- This sets up a cron job to launch Cloudflared at system startup.
+- Cloudflared will run automatically after reboot.
 
-6. Compile Cloudflared for MIPSLE:
-   ```bash
-   TARGET_ARCH=mipsle GOMIPS=softfloat make cloudflared
-   ```
+---
 
-After compiling, the `cloudflared` binary will be available in the folder.
+### Build Cloudflared from Source
+
+Instructions for compiling Cloudflared for **MIPSLE devices**. Tested on **Keenetic Giga (KN-1010)** with **KeeneticOS 4.3.6.1** and **Entware**.
+
+#### Step 1: Install Go Language
+
+Ensure Go is installed on your system:
+
+```bash
+apt update && apt upgrade
+```
+
+Follow system-specific instructions if Go is not available.
+
+#### Step 2: Clone the Cloudflared Repository
+
+```bash
+git clone https://github.com/cloudflare/cloudflared
+cd cloudflared
+```
+
+#### Step 3: Install the Build Toolchain
+
+```bash
+./.teamcity/install-cloudflare-go.sh
+```
+
+Expected confirmation:
+
+```bash
+Installed Go for linux/amd64 in /tmp/go
+Installed commands in /tmp/go/bin - all ok
+```
+
+#### Step 4: Compile Cloudflared for MIPSLE
+
+```bash
+TARGET_ARCH=mipsle GOMIPS=softfloat make cloudflared
+```
+
+- The `cloudflared` binary will appear in the current directory after successful compilation.
+
+This ensures you maintain the latest Cloudflared version optimized for your MIPSLE device.
 
 ## Usage
 
@@ -112,16 +144,15 @@ Connect Cloudflared to your Cloudflare Zero Trust Tunnel:
 /opt/etc/init.d/S99cloudflared start
 ```
 
-For more configuration options, visit [Cloudflare Tunnel Docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/).
+For more configuration options, see the Cloudflare Tunnel Docs: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/
 
 ## Author / Acknowledgements
 
-- **Author:** Furkan Kadir Guzeloglu  
-- Forked from [DarkAssassinUA/cloudflared](https://raw.githubusercontent.com/DarkAssassinUA/cloudflared)  
-- Inspired by the original Cloudflared project: [cloudflared](https://github.com/cloudflare/cloudflared)  
-- Thanks to the Cloudflare team for providing a secure tunneling solution.  
+- **Author:** Furkan Kadir Guzeloglu
+- Forked from DarkAssassinUA/cloudflared
+- Inspired by the original Cloudflared project: https://github.com/cloudflare/cloudflared
+- Thanks to the Cloudflare team for providing a secure tunneling solution.
 
 ## License
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
+This project is licensed under the MIT License: https://opensource.org/licenses/MIT
