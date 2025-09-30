@@ -29,7 +29,7 @@ All open issues related to the work of Cloudflared itself will be closed without
 
 ### Precompiled Binary
 
-Compiled binary from [cloudflared](https://github.com/cloudflare/cloudflared) for MIPSLE devices. Tested on Keenetic Giga (KN-1010) with Keenetic OS 4.2 Beta 3 and Entware.
+Compiled binary from [cloudflared](https://github.com/cloudflare/cloudflared) for MIPSLE devices. Tested on Keenetic Giga (KN-1010) with Keenetic OS 4.3.6.1 and Entware.
 
 1. Connect to OPKG SSH:
 
@@ -64,7 +64,7 @@ Compiled binary from [cloudflared](https://github.com/cloudflare/cloudflared) fo
 
 ### Build Yourself
 
-Compiled binary from [cloudflared](https://github.com/cloudflare/cloudflared) for MIPSLE devices. Tested on Keenetic Giga (KN-1010) with Keenetic OS 4.2 Beta 3 and Entware.
+Compiled binary from [cloudflared](https://github.com/cloudflare/cloudflared) for MIPSLE devices. Tested on Keenetic Giga (KN-1010) with Keenetic OS 4.3.6.1 and Entware.
 
 1. If you want to build it yourself, first install Go Lang:
 
