@@ -2,7 +2,7 @@
 
 Cloudflare Tunnel client for MIPSLE devices.  
 Tested on Keenetic Giga (KN-1010).  
-Current version: 2025.9.1
+Current version: 2026.1.2
 Built with Go 1.25.1
 
 ## Purpose
